@@ -1,93 +1,66 @@
-require([
-        "esri/WebScene",
-        "esri/views/SceneView",
-        "esri/layers/Layer"
-      ], function (Map, SceneView, Layer) {
-        const map = new Map({
-          basemap: "topo-vector",
-          ground: "world-elevation" 
-        });
-
-       var view = new SceneView({
-          map: map,
-          container: "viewDiv",
-         scale: 500000,
-          center: [87.5, 43.8]
-        });
-
-        var layer = Layer.fromPortalItem({
-          portalItem: {
-            id: "001215337f694fb4a44264582520d507"
-          }
-        })
-          .then(addLayer)
-          .catch(rejection);
-  
-        // Adds the layer to the map once it loads
-        function addLayer(layer) {
-          map.add(layer);
-        }
-        function rejection(error) {
-          console.log("Layer failed to load: ", error);
+    require([
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/Camera",
+	   "esri/widgets/Home",
+      "esri/widgets/Legend",
+      "esri/widgets/LayerList",
+      "dojo/domReady!"
+      
+    ], function(WebScene, SceneView, Camera,Legend,LayerList, Home) {
+    
+ 
+      /*var map = new Map({
+        basemap: "streets",
+        ground: "world-elevation"
+      });*/
+      var scene = new WebScene({
+        portalItem:{
+         id:"e4eba2a7ea814b4eb0a6ec03344140a2" 
         }
       });
-  
-var camera = new Camera({
+      
+      var camera = new Camera({
         position: [
-          -90.1994, // lon
-          38, // lat
-          10000000// elevation in meters
+           87.81,// lon
+          43.382655, // lat
+          5000// elevation in meters
         ],
         tilt:0,
         heading: 0
-      });
-
-
-var homeBtn = new Home({
+      })
+      var view = new SceneView({
+        container: "viewDiv",
+        map: scene,
+        camera: camera
+    });
+	
+	var homeBtn = new Home({
         view: view
       });
-
       // Add the home button to the top left corner of the view
     view.ui.add(homeBtn, "top-left");
-    
-    [urm, bei,stl].forEach(function(button) {
-      button.style.display = '.esri-button';
-      view.ui.add(button, 'bottom-right');
-    });
-    
+   
 
-urm.addEventListener('click', function() {
-      // reuse the default camera position already established in the homeBtn
-      view.goTo({
-        position: {
-          x: 87.60,
-          y: 43.82,
-          z: 5000000
-        },
-        tilt: 0,
-        heading: 0
-      });
-    });
 
-    bei.addEventListener('click', function() {
-      // reuse the default camera position already established in the homeBtn
-      view.goTo({
-        position: {
-          x: 116.4074,
-          y: 39.9042,
-          z: 5000000
-        },
-        tilt: 0,
-        heading: 0
-      });
     });
+view.when(function() {
+	
+          // get the first layer in the collection of operational layers in the WebMap
+          // when the resources in the MapView have loaded.
+        var featureLayer = scene.layers.getItemAt(1);
+
+        var legend = new Legend({
+          view: view,
+          layerInfos: [{
+            layer: featureLayer,
+            title: " What is in this map  "
+          }]
+        });
       
-      
-   stl.addEventListener('click', function() {
-      // reuse the default camera position already established in the homeBtn
-      view.goTo({
-        target:camera
-      });
-    });
- 
-    
+   view.ui.add(legend, "bottom-right");
+   view.ui.add(layerList, "bottom-right");
+   });
+var layerList = new LayerList({
+  view: view
+});
