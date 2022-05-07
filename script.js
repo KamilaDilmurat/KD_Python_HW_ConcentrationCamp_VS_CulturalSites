@@ -1,12 +1,10 @@
-
-
 require([
         "esri/WebScene",
         "esri/views/SceneView",
         "esri/layers/Layer"
       ], function (Map, SceneView, Layer) {
         const map = new Map({
-          basemap: "dark-gray",
+          basemap: "topo-vector",
           ground: "world-elevation" 
         });
 
@@ -25,7 +23,7 @@ require([
           .then(addLayer)
           .catch(rejection);
   
-  
+
 
         // Adds the layer to the map once it loads
         function addLayer(layer) {
