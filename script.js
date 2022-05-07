@@ -23,8 +23,6 @@ require([
           .then(addLayer)
           .catch(rejection);
   
-
-
         // Adds the layer to the map once it loads
         function addLayer(layer) {
           map.add(layer);
@@ -52,18 +50,18 @@ var homeBtn = new Home({
       // Add the home button to the top left corner of the view
     view.ui.add(homeBtn, "top-left");
     
-    [ber, bei,stl].forEach(function(button) {
+    [urm, bei,stl].forEach(function(button) {
       button.style.display = '.esri-button';
       view.ui.add(button, 'bottom-right');
     });
     
 
-ber.addEventListener('click', function() {
+urm.addEventListener('click', function() {
       // reuse the default camera position already established in the homeBtn
       view.goTo({
         position: {
-          x: 13.36,
-          y: 52.56,
+          x: 87.60,
+          y: 43.82,
           z: 5000000
         },
         tilt: 0,
